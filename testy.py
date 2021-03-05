@@ -41,7 +41,12 @@ def compile_and_run(c_file, fake_file=""):
         shell=True,
     )
     if result.returncode == 0:
-        print(result.stdout.decode("utf-8").strip())
+        output = result.stdout.decode("utf-8").strip()
+        if output:
+            print("\n" + output)
+        else:
+            sys.stdout.write(".")
+            sys.stdout.flush()
         return None
 
     # if it failed, check if we need to generate exploding fakes
