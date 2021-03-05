@@ -18,8 +18,15 @@ import re
 # todo support adjusting compiler commands
 # right now it assumes testy.c + testy.h are in the cwd
 COMPILER = os.environ.get("CC", "gcc")
+TESTY_INCLUDE_PATH = os.path.abspath(os.path.dirname(__file__))
+TESTY_C_PATH = os.path.join(TESTY_INCLUDE_PATH, "testy.c")
 COMPILE_COMMAND = (
-    COMPILER + " -Og -DTESTY_UNIT_TEST -Wl,--wrap=main testy.c {} -I. -o testy.test && ./testy.test"
+    COMPILER
+    + " -Og -DTESTY_UNIT_TEST -Wl,--wrap=main "
+    + TESTY_C_PATH
+    + " -I"
+    + TESTY_INCLUDE_PATH
+    + " {} -I. -o testy.test && ./testy.test"
 )
 
 # regex for locating linker missing definition errors
@@ -29,7 +36,9 @@ FIND_LINKER_ERRORS = re.compile(r"undefined reference to `(.*?)'")
 def compile_and_run(c_file, fake_file=""):
     """attempt to compile the file under test and run the result"""
     result = subprocess.run(
-        COMPILE_COMMAND.format(c_file + " " + fake_file), capture_output=True, shell=True
+        COMPILE_COMMAND.format(c_file + " " + fake_file),
+        capture_output=True,
+        shell=True,
     )
     if result.returncode == 0:
         print(result.stdout.decode("utf-8").strip())
