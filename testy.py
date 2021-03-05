@@ -26,10 +26,10 @@ COMPILE_COMMAND = (
 FIND_LINKER_ERRORS = re.compile(r"undefined reference to `(.*?)'")
 
 
-def compile_and_run(c_file):
+def compile_and_run(c_file, fake_file=""):
     """attempt to compile the file under test and run the result"""
     result = subprocess.run(
-        COMPILE_COMMAND.format(c_file), capture_output=True, shell=True
+        COMPILE_COMMAND.format(c_file + " " + fake_file), capture_output=True, shell=True
     )
     if result.returncode == 0:
         print(result.stdout.decode("utf-8").strip())
@@ -37,16 +37,16 @@ def compile_and_run(c_file):
 
     # if it failed, check if we need to generate exploding fakes
     stderr = result.stderr.decode("utf-8")
-    m = FIND_LINKER_ERRORS.search(stderr)
-    if not m:
+    m = FIND_LINKER_ERRORS.findall(stderr)
+    if fake_file or not m:
         # bail, don't know what to do here
         print("unrecoverable error:")
         print(result.args)
         print(stderr)
         sys.exit(-1)
 
-    # return list of exploding fakes
-    return m.groups()
+    # return deduplicated set of exploding fakes
+    return set(m)
 
 
 def main():
@@ -68,7 +68,7 @@ def main():
                 fake_file.flush()
 
                 # try again, with exploding fakes inserted
-                compile_and_run("{} {}".format(c_file, fake_file.name))
+                compile_and_run(c_file, fake_file.name)
 
 
 if __name__ == "__main__":
