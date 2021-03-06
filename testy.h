@@ -1,3 +1,4 @@
+#pragma once
 
 #if defined(TESTY_UNIT_TEST)
 #include <assert.h>
