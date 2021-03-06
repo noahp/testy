@@ -58,3 +58,4 @@ there's no `__real_main` function present).
 - run in parallel + output summary? (can be done via gnu parallel as-is 😬)
 - build caching (eg via Make?)?
 - 🌈 colors 🌈 ?
+- coverage (gcov)
