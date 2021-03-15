@@ -13,6 +13,7 @@ int multiply(int a, int b) {
     return a * b;
 }
 
+// test the above multiply function
 TEST(multiply, {
     assert(multiply(2, 3) == 6);
 }

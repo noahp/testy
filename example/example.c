@@ -8,7 +8,7 @@ int square(int n) {
 }
 
 TEST(
-    test_square,
+    square,
     {
       assert(square(2) == 4);
       assert(square(3) == 9);
@@ -20,6 +20,7 @@ TEST(
 //! this one fails and we get a nice (?) core dump!
 // TEST(test_square_fails, { assert(square(3) != 9); })
 
+// example main showing how testy overrides it in the test executable
 int main(int argc, char **argv) {
   (void)argc, (void)argc;
   printf("example main!\n");
