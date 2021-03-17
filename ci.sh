@@ -18,9 +18,11 @@ DOCKER_IMAGE_NAME=${DOCKER_IMAGE_NAME:-$(basename -s .git "$(git remote --verbos
 DOCKER_BUILDKIT=1 docker build -t "$DOCKER_IMAGE_NAME" --build-arg "UID=$(id -u)" -f Dockerfile .
 
 docker run --rm -v "$(pwd)":/mnt/workspace -t "$DOCKER_IMAGE_NAME" bash -c "
+# commit checker
+pre-commit run --all-files
 # basic happy path example
-make -C example &&
+make -C example
 # check clang-11
-CC=clang-11 make -C example &&
+CC=clang-11 make -C example
 # this test should fail
 ! make -C example-failing"

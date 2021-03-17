@@ -10,10 +10,10 @@ the testy main.
 """
 
 import os
-import sys
-import subprocess
-import tempfile
 import re
+import subprocess
+import sys
+import tempfile
 
 # todo support adjusting compiler commands
 # right now it assumes testy.c + testy.h are in the cwd
